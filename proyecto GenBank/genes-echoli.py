@@ -6,7 +6,7 @@ from Bio import SeqIO #Librerias para acceder a las bases de datos
 
 Entrez.email = "rau_95@hotmail.com" #Es necesario poner el email, aunque no es necesario hacerse cuenta.
 
-with Entrez.esearch(db="nucleotide", term="Escherichia") as handle:
+with Entrez.esearch(db="nucleotide", term="escherichia[orgn] AND complete genome[title]") as handle:
     record = Entrez.read(handle)
 
 #Con esearch se crea, digamos, la consulta. Con read se ejecuta y devuelve datos de la bbdd.
@@ -28,12 +28,12 @@ with Entrez.efetch(db="nucleotide", rettype="gb", retmode="text", id=record["IdL
 
 print("%s with %i features" % (seq_record.id, len(seq_record.features))) #id es la id del gen, features no se exactamente lo que es.
 print(seq_record)
+a = input("pausa organismo")
 print("Sequence (DNA): ", seq_record.seq) #.seq es la secuencia de nucleotidos en si (por ejemplo, AATGCCTA)
 #coding_dna = Seq(seq_record.seq, IUPAC.unambiguous_dna)
 
 print("===================================================================")
 print("===================================================================")
-
 
 #Transcription
 #Tenemos el ADN
@@ -44,14 +44,11 @@ messenger_rna = seq_record.seq.transcribe()
 print("Sequence (transcrito): ", messenger_rna)
 
 
-
-
 #Translation
 
 
 print("===================================================================")
 print("===================================================================")
-
 
 translation_messenger_rna = messenger_rna.translate(to_stop=True)
 print("Sequence (traducido): ", translation_messenger_rna)
@@ -65,6 +62,8 @@ print("===================================================================")
 #messenger_rna = "AUGCUAUUAUAA"
 
 tamanio = len(messenger_rna)
+a = input("pausa")
+
 codones_fin = ["UAA","UAG","UGA"]
 i = 0
 aux = ""
@@ -98,11 +97,12 @@ if tamanio > 2:
 
         elif aux == "AUG":
             gen_util = True
-            while aux != codones_fin[0] and aux != codones_fin[1] and aux != codones_fin[2] and i < tamanio:
+            while aux != codones_fin[0] and aux != codones_fin[1] and aux != codones_fin[2] and i < tamanio-3:
                 gen += aux
 
                 i += 3
                 aux = str(messenger_rna[i:i+3])
+            gen += aux
             print("===================================================================")
             print("===================================================================")
 
@@ -114,11 +114,13 @@ if tamanio > 2:
             print("===================================================================")
             print("===================================================================")
 
-        
+
         list_genes += [gen, gen_util]
         nlist += 1
 
-
+print("Numero de genes: ", nlist)
+print("Tamanio: ", tamanio)
+print("i: ", i)
 
 
 #Este es otro ejemplo. No se porque, sale un gen en el que no se nombra el asma directamente.
